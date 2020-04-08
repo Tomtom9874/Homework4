@@ -1,0 +1,26 @@
+#model file to be submitted to NEOS
+#notice that:
+#(1) options will be set in a command file;
+# (2) there is no data statement;
+# (3) the "solve" command is issued in a command file
+
+#model file for set covering (Cameras problem)
+
+param M;  #set to be covered
+param S;  #subset IDs of M
+
+param c{1..S} default 1;    #cost associated with subset
+param a{1..M,1..S};  #subset matrix -- subset id j in S contains which elements of M
+
+var x{1..S} binary;  #if subset j in S is chosen
+
+minimize cost:  sum{j in 1..S} x[j];
+
+s.t. cover {i in 3..M}: sum{j in 1..S} a[i,j]*x[j] >= 1;
+
+#note: I turned off these extra constraints in the original problem to make it
+# a little harder for the CPLEX solver
+
+#s.t. superstition: x[13] = 1;
+#s.t. doubleCover {i in 1..2}: sum{j in 1..S} a[i,j]*x[j] >= 2;
+
